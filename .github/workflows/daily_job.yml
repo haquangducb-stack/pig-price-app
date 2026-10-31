@@ -1,0 +1,26 @@
+name: Tự Động Dự Báo Giá Lợn Hơi
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # Chạy tự động mỗi ngày lúc 6:00 sáng UTC (tương đương 13:00 giờ Việt Nam)
+  workflow_dispatch: # Cho phép bạn bấm nút chạy thủ công bất cứ lúc nào trên web GitHub
+
+jobs:
+  run-predictor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt môi trường Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Cài đặt các thư viện cần thiết
+        run: |
+          pip install pandas numpy supabase xgboost requests beautifulsoup4 scikit-learn
+
+      - name: Chạy script Python dự đoán
+        run: |
+          python predictor.py
